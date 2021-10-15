@@ -1,3 +1,2 @@
 import { RefObject } from 'react';
-declare function useOnOutClick(targetRef: RefObject<HTMLElement>, onOutClick: ((e: globalThis.MouseEvent) => void) | (() => void), ignoreRef?: RefObject<HTMLElement>): void;
-export default useOnOutClick;
+export default function useOnOutClick<TTargetElement extends HTMLElement, TIgnoreElement extends HTMLElement>(onOutClick: ((e: globalThis.MouseEvent) => void) | (() => void)): [RefObject<TTargetElement>, RefObject<TIgnoreElement>];

@@ -1,10 +1,11 @@
-import { RefObject, useEffect } from 'react';
+import { RefObject, useEffect, useRef } from 'react';
 
-function useOnOutClick(
-    targetRef: RefObject<HTMLElement>,
-    onOutClick: ((e: globalThis.MouseEvent) => void) | (() => void),
-    ignoreRef?: RefObject<HTMLElement>
+export default function useOnOutClick<TTargetElement extends HTMLElement, TIgnoreElement extends HTMLElement>(
+    onOutClick: ((e: globalThis.MouseEvent) => void) | (() => void)
 ) {
+    const targetRef = useRef<TTargetElement>(null);
+    const ignoreRef = useRef<TIgnoreElement>(null);
+
     useEffect(() => {
         const outClickHanlder = (e: globalThis.MouseEvent) => {
             const target = e.target as Node;
@@ -26,7 +27,7 @@ function useOnOutClick(
         return () => {
             window.removeEventListener('click', outClickHanlder, true);
         };
-    }, [onOutClick]);
-}
+    }, [onOutClick, targetRef.current, ignoreRef.current]);
 
-export default useOnOutClick;
+    return [targetRef, ignoreRef] as [RefObject<TTargetElement>, RefObject<TIgnoreElement>];
+}
